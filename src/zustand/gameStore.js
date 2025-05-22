@@ -5,7 +5,7 @@ const questions = [
     id: 1,
     text: "Eng katta sayyora qaysi?",
     answer: "Yupiter",
-    point: 10,
+    point: 20,
     isAnswered: false,
   },
   {
@@ -15,20 +15,20 @@ const questions = [
     point: 5,
     isAnswered: false,
   },
-  // {
-  //   id: 3,
-  //   text: "Eng baland cho'qqi?",
-  //   answer: "Everest",
-  //   point: 15,
-  //   isAnswered: false,
-  // },
-  // {
-  //   id: 4,
-  //   text: "Everestdan oldingi eng baland cho'qqi?",
-  //   answer: "Everest",
-  //   point: 20,
-  //   isAnswered: false,
-  // },
+  {
+    id: 3,
+    text: "Eng baland cho'qqi?",
+    answer: "Everest",
+    point: 15,
+    isAnswered: false,
+  },
+  {
+    id: 4,
+    text: "Everestdan oldingi eng baland cho'qqi?",
+    answer: "Everest",
+    point: 20,
+    isAnswered: false,
+  },
   // {
   //   id: 5,
   //   text: "Ikkita birni bir-biriga qo'shganda qachon bir hosil bo'ladi?",
@@ -64,14 +64,12 @@ const teams = [
   { id: 21231, name: "Team 2", score: 0 },
   { id: 312312, name: "Team 3", score: 0 },
   { id: 4123123, name: "Team 4", score: 0 },
-  { id: 1231, name: "Team 5", score: 0 },
-  { id: 123123, name: "Team 6", score: 0 },
 ];
 
 export const useGameStore = create((set, get) => ({
   questions,
   currentQuestion: null,
-  teams,
+  teams: null,
   currentTeam: teams[0],
   setCurrentQuestion: (question) =>
     set((state) => ({
@@ -101,6 +99,20 @@ export const useGameStore = create((set, get) => ({
       },
     })),
   isGameOver: () => {
-    return get().questions.every(q => q.isAnswered)
-  }
+    return get().questions.every((q) => q.isAnswered);
+  },
+  getWinner: () => {
+    const maxNumber = Math.max(...teams.map((t) => t.score));
+    const winner = teams.filter((t) => t.score === maxNumber);
+    return winner;
+  },
+  generateTeams: (numOfTeams) => set((state) => ({
+    teams: Array.from({length: numOfTeams}, (team, index) => {
+      return {
+        id: index,
+        name: `Team ${index + 1}`,
+        score: 0
+      }
+    })
+  }))
 }));
